@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PicoClaw | Edge Runtime Evolution</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #030a08;
+            --accent: #10b881;
+            --progenitor: #64748b;
+            --text-main: #d1fae5;
+            --text-muted: #064e3b;
+            --border: rgba(16, 184, 129, 0.15);
+            --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'JetBrains Mono', monospace;
+            line-height: 1.6;
+        }
+
+        /* UI-UX Pro Max: CRT Scanline Overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.04), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.04));
+            z-index: 1000;
+            pointer-events: none;
+            background-size: 100% 3px, 3px 100%;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 4rem;
+        }
+
+        /* Evolution Header */
+        header {
+            padding: 4rem 0;
+            margin-bottom: 6rem;
+            border-bottom: 1px dashed var(--border);
+        }
+
+        .lineage-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1.25rem;
+            background: rgba(16, 184, 129, 0.05);
+            border: 1px solid var(--accent);
+            border-radius: 4px;
+            font-size: 0.6rem;
+            font-weight: 800;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 6rem;
+            font-weight: 800;
+            line-height: 0.9;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 15px rgba(16, 184, 129, 0.3);
+        }
+
+        .lead {
+            font-size: 1.5rem;
+            color: var(--accent);
+            max-width: 600px;
+            opacity: 0.8;
+        }
+
+        /* Terminal Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 2rem;
+        }
+
+        .term-card {
+            grid-column: span 6;
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            background: rgba(16, 184, 129, 0.02);
+            position: relative;
+        }
+
+        .term-card::before {
+            content: "[SPECIATION_LOG]";
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: var(--bg);
+            padding: 0 10px;
+            font-size: 0.55rem;
+            color: var(--text-muted);
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+        }
+
+        /* Heartbeat Logic - Deep Content */
+        .heartbeat-feed {
+            margin-top: 2rem;
+            font-size: 0.75rem;
+        }
+
+        .beat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed rgba(16, 184, 129, 0.1);
+        }
+
+        .beat-sig {
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* UI-UX Pro Max: Orbit Nav */
+        .evo-nav {
+            position: fixed;
+            right: 4rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            z-index: 100;
+        }
+
+        .nav-dot {
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .nav-dot:hover,
+        .nav-dot.active {
+            background: var(--accent);
+            transform: scale(1.5);
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        [data-reveal] {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: var(--transition);
+        }
+
+        [data-reveal].active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        footer {
+            margin-top: 10rem;
+            padding-top: 4rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            letter-spacing: 0.3em;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="evo-nav">
+        <a href="../index.html" class="nav-dot" title="Genesis"></a>
+        <a href="../AI-Agent-Nanobot/index.html" class="nav-dot" title="Nanobot"></a>
+        <a href="../AI-Agent-NanoClaw/index.html" class="nav-dot" title="NanoClaw"></a>
+        <div class="nav-dot active" title="PicoClaw"></div>
+        <a href="../AI-Agent-ZeroClaw/index.html" class="nav-dot" title="ZeroClaw"></a>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="lineage-badge" data-reveal>
+                <svg style="width:14px; height:14px; fill:none; stroke:currentColor; stroke-width:2;">
+                    <path d="M12 2v20" />
+                    <path d="m17 5-5-3-5 3" />
+                    <path d="M2 12h20" />
+                </svg>
+                EVO-03: THE DISTRIBUTED
+            </div>
+            <h1 data-reveal style="transition-delay: 0.1s">PicoClaw:<br>Distributed <span>Edge.</span></h1>
+            <p class="lead" data-reveal style="transition-delay: 0.2s">The minimal-footprint evolution. Designed for
+                isolated $10 hardware and resilient heartbeat telemetry.</p>
+        </header>
+
+        <div class="grid">
+            <!-- Heartbeat Systems - Deep Content -->
+            <div class="term-card" style="grid-column: span 12;" data-reveal>
+                <h3>Active Heartbeat CRONs [HEARTBEAT.md]</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem;">PicoClaw hit 12K stars in one week. Driven by
+                    the community-led Sipeed roadmap.</p>
+                <div class="heartbeat-feed">
+                    <div class="beat-item"><span><span class="beat-sig"
+                                style="display:inline-block; margin-right:1rem;"></span>
+                            Check system health metrics</span><span style="color:var(--text-muted)">EVERY 30M</span>
+                    </div>
+                    <div class="beat-item"><span><span class="beat-sig"
+                                style="display:inline-block; margin-right:1rem; animation-delay:0.2s;"></span>
+                            Scan GitHub notifications</span><span style="color:var(--text-muted)">ALWAYS</span></div>
+                    <div class="beat-item"><span><span class="beat-sig"
+                                style="display:inline-block; margin-right:1rem; animation-delay:0.4s;"></span>
+                            Verify thermal temperature</span><span style="color:var(--text-muted)">DAILY</span></div>
+                </div>
+            </div>
+
+            <!-- Hardware Spec -->
+            <div class="term-card" data-reveal>
+                <h3>Edge Footprint</h3>
+                <div style="font-size: 0.75rem; line-height: 2;">
+                    > RUNTIME: Go 1.22 Native<br>
+                    > MEMORY: < 10MB RAM<br>
+                        > ARCH: ARMv6/v7 Compatible
+                </div>
+            </div>
+
+            <!-- Thermal Logic -->
+            <div class="term-card" data-reveal style="transition-delay: 0.1s">
+                <h3>Thermal Reasoner</h3>
+                <p style="color: var(--text-muted); font-size: 0.75rem;">Autonomous frequency scaling for fanless edge
+                    nodes. Speciated to survive high-heat industrial environments.</p>
+            </div>
+        </div>
+
+        <footer>
+            PICOCLAW EDGE RUNTIME • SPECIATION V2.2 • DISTRIBUTED_RELIABILITY_PASS
+        </footer>
+    </div>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+    </script>
+</body>
+
+</html>
