@@ -211,6 +211,56 @@
             letter-spacing: 0.3em;
             text-align: center;
         }
+
+        /* Skills + Workflows Upgrade */
+        .pc-section {
+            margin-top: 6rem;
+        }
+        .pc-section-label {
+            font-size: 0.55rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+        .pc-skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .pc-skill-chip {
+            padding: 0.4rem 1rem;
+            background: rgba(16, 184, 129, 0.03);
+            border: 1px dashed rgba(16, 184, 129, 0.3);
+            font-size: 0.7rem;
+            color: var(--text-main);
+            letter-spacing: 0.05em;
+        }
+        .pc-skill-chip.is-new {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(16, 184, 129, 0.08);
+        }
+        .pc-skill-chip.is-new::after { content: " ✦"; }
+        .pc-workflow-list {
+            display: flex;
+            flex-direction: column;
+        }
+        .pc-workflow-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px dashed rgba(16, 184, 129, 0.1);
+            font-size: 0.75rem;
+        }
+        .pc-workflow-trigger {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            opacity: 0.8;
+        }
+        .pc-workflow-item.is-new .pc-workflow-name::after { content: " ✦"; color: var(--accent); font-size: 0.6rem; }
     </style>
 </head>
 
@@ -277,8 +327,44 @@
             </div>
         </div>
 
+        <div class="pc-section" data-reveal>
+            <div class="pc-section-label">> SKILLS_LIBRARY [13 LOADED]</div>
+            <div class="pc-skills-grid">
+                <span class="pc-skill-chip">iot-monitor</span>
+                <span class="pc-skill-chip">home-automation</span>
+                <span class="pc-skill-chip">network-guardian</span>
+                <span class="pc-skill-chip">weather-reporter</span>
+                <span class="pc-skill-chip">resource-optimizer</span>
+                <span class="pc-skill-chip">add-telegram</span>
+                <span class="pc-skill-chip">add-gmail</span>
+                <span class="pc-skill-chip">add-slack</span>
+                <span class="pc-skill-chip">add-obsidian</span>
+                <span class="pc-skill-chip">add-supabase</span>
+                <span class="pc-skill-chip is-new">code-reviewer</span>
+                <span class="pc-skill-chip is-new">security-scanner</span>
+                <span class="pc-skill-chip is-new">deploy-everywhere</span>
+            </div>
+        </div>
+
+        <div class="pc-section" data-reveal style="transition-delay: 0.1s">
+            <div class="pc-section-label">> ACTIVE_WORKFLOWS [11 SCHEDULED]</div>
+            <div class="pc-workflow-list">
+                <div class="pc-workflow-item"><span class="pc-workflow-name">heartbeat-system</span><span class="pc-workflow-trigger">EVERY 30M</span></div>
+                <div class="pc-workflow-item"><span class="pc-workflow-name">github-scan</span><span class="pc-workflow-trigger">ALWAYS</span></div>
+                <div class="pc-workflow-item"><span class="pc-workflow-name">thermal-monitor</span><span class="pc-workflow-trigger">DAILY</span></div>
+                <div class="pc-workflow-item"><span class="pc-workflow-name">daily-standup</span><span class="pc-workflow-trigger">DAILY 09:00</span></div>
+                <div class="pc-workflow-item"><span class="pc-workflow-name">device-uptime</span><span class="pc-workflow-trigger">CONTINUOUS</span></div>
+                <div class="pc-workflow-item"><span class="pc-workflow-name">network-security</span><span class="pc-workflow-trigger">EVERY 4H</span></div>
+                <div class="pc-workflow-item"><span class="pc-workflow-name">weather-forecast</span><span class="pc-workflow-trigger">DAILY 07:00</span></div>
+                <div class="pc-workflow-item"><span class="pc-workflow-name">resource-optimization</span><span class="pc-workflow-trigger">EVERY 1H</span></div>
+                <div class="pc-workflow-item is-new"><span class="pc-workflow-name">content-publishing</span><span class="pc-workflow-trigger">WED 08:00</span></div>
+                <div class="pc-workflow-item is-new"><span class="pc-workflow-name">ci-security-gate</span><span class="pc-workflow-trigger">ON PR</span></div>
+                <div class="pc-workflow-item is-new"><span class="pc-workflow-name">repository-upgrade-cycle</span><span class="pc-workflow-trigger">SUN 01:00</span></div>
+            </div>
+        </div>
+
         <footer>
-            PICOCLAW EDGE RUNTIME • SPECIATION V2.2 • DISTRIBUTED_RELIABILITY_PASS
+            PICOCLAW EDGE RUNTIME • SPECIATION V2.3 • 13 SKILLS • 11 WORKFLOWS • DISTRIBUTED_RELIABILITY_PASS
         </footer>
     </div>
 
