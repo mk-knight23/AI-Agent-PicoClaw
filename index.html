@@ -20,6 +20,7 @@
             --text-muted: #064e3b;
             --border: rgba(16, 184, 129, 0.15);
             --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            --neon-glow: 0 0 15px rgba(16, 184, 129, 0.3);
         }
 
         * {
@@ -34,6 +35,7 @@
             color: var(--text-main);
             font-family: 'JetBrains Mono', monospace;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         /* UI-UX Pro Max: CRT Scanline Overlay */
@@ -59,7 +61,7 @@
         /* Evolution Header */
         header {
             padding: 4rem 0;
-            margin-bottom: 6rem;
+            margin-bottom: 4rem;
             border-bottom: 1px dashed var(--border);
         }
 
@@ -84,7 +86,11 @@
             font-weight: 800;
             line-height: 0.9;
             margin-bottom: 2rem;
-            text-shadow: 0 0 15px rgba(16, 184, 129, 0.3);
+            text-shadow: var(--neon-glow);
+        }
+
+        h1 span {
+            color: var(--accent);
         }
 
         .lead {
@@ -99,18 +105,26 @@
             display: grid;
             grid-template-columns: repeat(12, 1fr);
             gap: 2rem;
+            margin-bottom: 4rem;
         }
 
         .term-card {
             grid-column: span 6;
             border: 1px solid var(--border);
-            padding: 2.5rem;
+            padding: 2rem;
             background: rgba(16, 184, 129, 0.02);
             position: relative;
+            transition: var(--transition);
+        }
+
+        .term-card:hover {
+            border-color: var(--accent);
+            background: rgba(16, 184, 129, 0.05);
+            box-shadow: inset 0 0 20px rgba(16, 184, 129, 0.1);
         }
 
         .term-card::before {
-            content: "[SPECIATION_LOG]";
+            content: attr(data-label);
             position: absolute;
             top: -10px;
             left: 20px;
@@ -118,53 +132,100 @@
             padding: 0 10px;
             font-size: 0.55rem;
             color: var(--text-muted);
+            letter-spacing: 0.1em;
         }
 
         h3 {
-            font-size: 1.25rem;
+            font-size: 1.1rem;
             margin-bottom: 1.5rem;
             text-transform: uppercase;
             letter-spacing: 0.1em;
             color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        /* Heartbeat Logic - Deep Content */
+        /* Heartbeat Logic */
         .heartbeat-feed {
-            margin-top: 2rem;
+            margin-top: 1rem;
             font-size: 0.75rem;
         }
 
         .beat-item {
             display: flex;
             justify-content: space-between;
-            padding: 0.5rem 0;
+            align-items: center;
+            padding: 0.6rem 0;
             border-bottom: 1px dashed rgba(16, 184, 129, 0.1);
         }
 
         .beat-sig {
-            width: 6px;
-            height: 6px;
+            width: 8px;
+            height: 8px;
             background: var(--accent);
             border-radius: 50%;
             box-shadow: 0 0 10px var(--accent);
-            animation: pulse 1s infinite;
+            animation: pulse 1.5s infinite;
         }
 
         @keyframes pulse {
-            0% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.3;
-            }
-
-            100% {
-                opacity: 1;
-            }
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
         }
 
-        /* UI-UX Pro Max: Orbit Nav */
+        /* Skills Matrix */
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .matrix-item {
+            padding: 0.5rem;
+            border: 1px solid rgba(16, 184, 129, 0.1);
+            font-size: 0.65rem;
+            text-align: center;
+            background: rgba(16, 184, 129, 0.02);
+            transition: var(--transition);
+        }
+
+        .matrix-item:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(16, 184, 129, 0.08);
+        }
+
+        /* Use Cases */
+        .case-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .case-card {
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            background: rgba(16, 184, 129, 0.01);
+        }
+
+        .case-title {
+            font-size: 0.9rem;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+            font-weight: 800;
+        }
+
+        .case-desc {
+            font-size: 0.75rem;
+            color: var(--text-main);
+            opacity: 0.7;
+        }
+
+        /* Navigation */
         .evo-nav {
             position: fixed;
             right: 4rem;
@@ -193,8 +254,8 @@
 
         [data-reveal] {
             opacity: 0;
-            transform: translateY(10px);
-            transition: var(--transition);
+            transform: translateY(15px);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         [data-reveal].active {
@@ -203,64 +264,29 @@
         }
 
         footer {
-            margin-top: 10rem;
-            padding-top: 4rem;
+            margin-top: 8rem;
+            padding: 4rem 0;
             border-top: 1px solid var(--border);
             font-size: 0.6rem;
             color: var(--text-muted);
             letter-spacing: 0.3em;
             text-align: center;
+            text-transform: uppercase;
         }
 
-        /* Skills + Workflows Upgrade */
-        .pc-section {
-            margin-top: 6rem;
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--text-muted); }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+        @media (max-width: 768px) {
+            .container { padding: 2rem; }
+            h1 { font-size: 3.5rem; }
+            .grid { grid-template-columns: 1fr; }
+            .term-card { grid-column: span 12; }
+            .evo-nav { display: none; }
         }
-        .pc-section-label {
-            font-size: 0.55rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.3em;
-            color: var(--text-muted);
-            margin-bottom: 2rem;
-        }
-        .pc-skills-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-        .pc-skill-chip {
-            padding: 0.4rem 1rem;
-            background: rgba(16, 184, 129, 0.03);
-            border: 1px dashed rgba(16, 184, 129, 0.3);
-            font-size: 0.7rem;
-            color: var(--text-main);
-            letter-spacing: 0.05em;
-        }
-        .pc-skill-chip.is-new {
-            border-color: var(--accent);
-            color: var(--accent);
-            background: rgba(16, 184, 129, 0.08);
-        }
-        .pc-skill-chip.is-new::after { content: " ✦"; }
-        .pc-workflow-list {
-            display: flex;
-            flex-direction: column;
-        }
-        .pc-workflow-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.75rem 0;
-            border-bottom: 1px dashed rgba(16, 184, 129, 0.1);
-            font-size: 0.75rem;
-        }
-        .pc-workflow-trigger {
-            font-size: 0.6rem;
-            color: var(--text-muted);
-            opacity: 0.8;
-        }
-        .pc-workflow-item.is-new .pc-workflow-name::after { content: " ✦"; color: var(--accent); font-size: 0.6rem; }
     </style>
 </head>
 
@@ -290,81 +316,95 @@
         </header>
 
         <div class="grid">
-            <!-- Heartbeat Systems - Deep Content -->
-            <div class="term-card" style="grid-column: span 12;" data-reveal>
-                <h3>Active Heartbeat CRONs [HEARTBEAT.md]</h3>
-                <p style="color: var(--text-muted); font-size: 0.85rem;">PicoClaw hit 12K stars in one week. Driven by
-                    the community-led Sipeed roadmap.</p>
+            <!-- Active Heartbeats -->
+            <div class="term-card" style="grid-column: span 12;" data-reveal data-label="TELEMETRY_STREAM">
+                <h3><span class="beat-sig"></span> ACTIVE HEARTBEAT CHANNELS</h3>
                 <div class="heartbeat-feed">
-                    <div class="beat-item"><span><span class="beat-sig"
-                                style="display:inline-block; margin-right:1rem;"></span>
-                            Check system health metrics</span><span style="color:var(--text-muted)">EVERY 30M</span>
+                    <div class="beat-item">
+                        <span>system-diagnostic.md</span>
+                        <span style="color:var(--text-muted)">15M INTERVAL • DISCORD</span>
                     </div>
-                    <div class="beat-item"><span><span class="beat-sig"
-                                style="display:inline-block; margin-right:1rem; animation-delay:0.2s;"></span>
-                            Scan GitHub notifications</span><span style="color:var(--text-muted)">ALWAYS</span></div>
-                    <div class="beat-item"><span><span class="beat-sig"
-                                style="display:inline-block; margin-right:1rem; animation-delay:0.4s;"></span>
-                            Verify thermal temperature</span><span style="color:var(--text-muted)">DAILY</span></div>
+                    <div class="beat-item">
+                        <span>security-patrol.md</span>
+                        <span style="color:var(--text-muted)">1H INTERVAL • TELEGRAM</span>
+                    </div>
+                    <div class="beat-item">
+                        <span>morning-briefing.md</span>
+                        <span style="color:var(--text-muted)">DAILY 09:00 • WHATSAPP</span>
+                    </div>
+                    <div class="beat-item">
+                        <span>home-server.md</span>
+                        <span style="color:var(--text-muted)">30M INTERVAL • TELEGRAM</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skills Matrix -->
+            <div class="term-card" style="grid-column: span 12;" data-reveal data-label="SKILL_CAPABILITIES">
+                <h3>EDGE SKILLS MATRIX</h3>
+                <div class="matrix-grid">
+                    <div class="matrix-item">network-guardian</div>
+                    <div class="matrix-item">iot-monitor</div>
+                    <div class="matrix-item">home-automation</div>
+                    <div class="matrix-item">weather-reporter</div>
+                    <div class="matrix-item">resource-optimizer</div>
+                    <div class="matrix-item">code-reviewer</div>
+                    <div class="matrix-item">security-scanner</div>
+                    <div class="matrix-item">deploy-everywhere</div>
+                    <div class="matrix-item">add-telegram</div>
+                    <div class="matrix-item">add-slack</div>
+                    <div class="matrix-item">add-gmail</div>
+                    <div class="matrix-item">add-obsidian</div>
+                    <div class="matrix-item">add-supabase</div>
+                    <div class="matrix-item">claw-ecosystem</div>
+                </div>
+            </div>
+
+            <!-- Workflows -->
+            <div class="term-card" style="grid-column: span 8;" data-reveal data-label="AUTOMATION_PIPELINES">
+                <h3>SCHEDULED WORKFLOWS</h3>
+                <div class="heartbeat-feed">
+                    <div class="beat-item"><span>ci-security-gate</span><span style="color:var(--text-muted)">ON PUSH</span></div>
+                    <div class="beat-item"><span>content-publishing</span><span style="color:var(--text-muted)">BI-WEEKLY</span></div>
+                    <div class="beat-item"><span>cross-compile-pipeline</span><span style="color:var(--text-muted)">ON RELEASE</span></div>
+                    <div class="beat-item"><span>swarm-orchestration</span><span style="color:var(--text-muted)">EVENT-DRIVEN</span></div>
+                    <div class="beat-item"><span>repository-upgrade-cycle</span><span style="color:var(--text-muted)">MONTHLY</span></div>
                 </div>
             </div>
 
             <!-- Hardware Spec -->
-            <div class="term-card" data-reveal>
-                <h3>Edge Footprint</h3>
-                <div style="font-size: 0.75rem; line-height: 2;">
-                    > RUNTIME: Go 1.22 Native<br>
-                    > MEMORY: < 10MB RAM<br>
-                        > ARCH: ARMv6/v7 Compatible
+            <div class="term-card" style="grid-column: span 4;" data-reveal data-label="HARDWARE_PROFILE">
+                <h3>NODE SPECS</h3>
+                <div style="font-size: 0.7rem; line-height: 2.2;">
+                    > RUNTIME: Go 1.21+<br>
+                    > BINARY: < 10MB<br>
+                    > TARGETS: RISC-V / ARM / MIPS<br>
+                    > OS: Linux / Termux / OpenWrt
                 </div>
             </div>
-
-            <!-- Thermal Logic -->
-            <div class="term-card" data-reveal style="transition-delay: 0.1s">
-                <h3>Thermal Reasoner</h3>
-                <p style="color: var(--text-muted); font-size: 0.75rem;">Autonomous frequency scaling for fanless edge
-                    nodes. Speciated to survive high-heat industrial environments.</p>
-            </div>
         </div>
 
-        <div class="pc-section" data-reveal>
-            <div class="pc-section-label">> SKILLS_LIBRARY [13 LOADED]</div>
-            <div class="pc-skills-grid">
-                <span class="pc-skill-chip">iot-monitor</span>
-                <span class="pc-skill-chip">home-automation</span>
-                <span class="pc-skill-chip">network-guardian</span>
-                <span class="pc-skill-chip">weather-reporter</span>
-                <span class="pc-skill-chip">resource-optimizer</span>
-                <span class="pc-skill-chip">add-telegram</span>
-                <span class="pc-skill-chip">add-gmail</span>
-                <span class="pc-skill-chip">add-slack</span>
-                <span class="pc-skill-chip">add-obsidian</span>
-                <span class="pc-skill-chip">add-supabase</span>
-                <span class="pc-skill-chip is-new">code-reviewer</span>
-                <span class="pc-skill-chip is-new">security-scanner</span>
-                <span class="pc-skill-chip is-new">deploy-everywhere</span>
-            </div>
-        </div>
-
-        <div class="pc-section" data-reveal style="transition-delay: 0.1s">
-            <div class="pc-section-label">> ACTIVE_WORKFLOWS [11 SCHEDULED]</div>
-            <div class="pc-workflow-list">
-                <div class="pc-workflow-item"><span class="pc-workflow-name">heartbeat-system</span><span class="pc-workflow-trigger">EVERY 30M</span></div>
-                <div class="pc-workflow-item"><span class="pc-workflow-name">github-scan</span><span class="pc-workflow-trigger">ALWAYS</span></div>
-                <div class="pc-workflow-item"><span class="pc-workflow-name">thermal-monitor</span><span class="pc-workflow-trigger">DAILY</span></div>
-                <div class="pc-workflow-item"><span class="pc-workflow-name">daily-standup</span><span class="pc-workflow-trigger">DAILY 09:00</span></div>
-                <div class="pc-workflow-item"><span class="pc-workflow-name">device-uptime</span><span class="pc-workflow-trigger">CONTINUOUS</span></div>
-                <div class="pc-workflow-item"><span class="pc-workflow-name">network-security</span><span class="pc-workflow-trigger">EVERY 4H</span></div>
-                <div class="pc-workflow-item"><span class="pc-workflow-name">weather-forecast</span><span class="pc-workflow-trigger">DAILY 07:00</span></div>
-                <div class="pc-workflow-item"><span class="pc-workflow-name">resource-optimization</span><span class="pc-workflow-trigger">EVERY 1H</span></div>
-                <div class="pc-workflow-item is-new"><span class="pc-workflow-name">content-publishing</span><span class="pc-workflow-trigger">WED 08:00</span></div>
-                <div class="pc-workflow-item is-new"><span class="pc-workflow-name">ci-security-gate</span><span class="pc-workflow-trigger">ON PR</span></div>
-                <div class="pc-workflow-item is-new"><span class="pc-workflow-name">repository-upgrade-cycle</span><span class="pc-workflow-trigger">SUN 01:00</span></div>
+        <!-- Use Cases -->
+        <div data-reveal data-label="REAL_WORLD_DEPLOYMENT">
+            <h3 style="margin-bottom: 2rem;">AGENT USE CASES</h3>
+            <div class="case-grid">
+                <div class="case-card">
+                    <div class="case-title">Recycled Phone Agent</div>
+                    <div class="case-desc">Repurpose old Android hardware via Termux into a 24/7 autonomous monitoring node.</div>
+                </div>
+                <div class="case-card">
+                    <div class="case-title">Router Intelligence</div>
+                    <div class="case-desc">Deploy directly to OpenWrt routers for network-level threat detection and traffic analysis.</div>
+                </div>
+                <div class="case-card">
+                    <div class="case-title">IoT Sentinel</div>
+                    <div class="case-desc">Low-power monitoring of physical sensors, resource optimization, and emergency alerts.</div>
+                </div>
             </div>
         </div>
 
         <footer>
-            PICOCLAW EDGE RUNTIME • SPECIATION V2.3 • 13 SKILLS • 11 WORKFLOWS • DISTRIBUTED_RELIABILITY_PASS
+            PICOCLAW EDGE RUNTIME • SPECIATION V3.0 • 14 SKILLS • 11 WORKFLOWS • HARDWARE_AGNOSTIC_RELIABILITY
         </footer>
     </div>
 
