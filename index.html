@@ -4,416 +4,258 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PicoClaw | Edge Runtime Evolution</title>
+    <title>PicoClaw | The Edge Runtime</title>
+    <meta name="description"
+        content="PicoClaw is the minimal footprint Go-native evolution of the AI-CLAW-ECOSYSTEM, designed for extreme edge hardware and IoT clusters.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;800&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
         rel="stylesheet">
 
     <style>
         :root {
-            --bg: #030a08;
-            --accent: #10b881;
-            --progenitor: #64748b;
-            --text-main: #d1fae5;
-            --text-muted: #064e3b;
-            --border: rgba(16, 184, 129, 0.15);
-            --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            --neon-glow: 0 0 15px rgba(16, 184, 129, 0.3);
+            --bg-primary: #020617;
+            --bg-secondary: #0f172a;
+            --accent: #10b881; /* Edge Accent */
+            --accent-glow: rgba(16, 184, 129, 0.4);
+            --text-primary: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(16, 184, 129, 0.3);
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            --radius-md: 12px;
+            --radius-lg: 24px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-font-smoothing: antialiased;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
 
         body {
-            background-color: var(--bg);
-            color: var(--text-main);
-            font-family: 'JetBrains Mono', monospace;
-            line-height: 1.6;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
             overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        /* UI-UX Pro Max: CRT Scanline Overlay */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.04), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.04));
-            z-index: 1000;
-            pointer-events: none;
-            background-size: 100% 3px, 3px 100%;
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 2rem; position: relative; }
+
+        /* Ambient Background */
+        .matrix-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 0%, rgba(15, 23, 42, 0.8) 0%, rgba(2, 6, 23, 1) 100%);
+            z-index: -1;
         }
 
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 4rem;
-        }
-
-        /* Evolution Header */
-        header {
-            padding: 4rem 0;
-            margin-bottom: 4rem;
-            border-bottom: 1px dashed var(--border);
-        }
-
-        .lineage-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.5rem 1.25rem;
-            background: rgba(16, 184, 129, 0.05);
-            border: 1px solid var(--accent);
-            border-radius: 4px;
-            font-size: 0.6rem;
-            font-weight: 800;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            margin-bottom: 2rem;
-        }
-
-        h1 {
-            font-size: 6rem;
-            font-weight: 800;
-            line-height: 0.9;
-            margin-bottom: 2rem;
-            text-shadow: var(--neon-glow);
-        }
-
-        h1 span {
-            color: var(--accent);
-        }
-
-        .lead {
-            font-size: 1.5rem;
-            color: var(--accent);
-            max-width: 600px;
-            opacity: 0.8;
-        }
-
-        /* Terminal Grid */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            gap: 2rem;
-            margin-bottom: 4rem;
-        }
-
-        .term-card {
-            grid-column: span 6;
-            border: 1px solid var(--border);
-            padding: 2rem;
-            background: rgba(16, 184, 129, 0.02);
-            position: relative;
-            transition: var(--transition);
-        }
-
-        .term-card:hover {
-            border-color: var(--accent);
-            background: rgba(16, 184, 129, 0.05);
-            box-shadow: inset 0 0 20px rgba(16, 184, 129, 0.1);
-        }
-
-        .term-card::before {
-            content: attr(data-label);
-            position: absolute;
-            top: -10px;
-            left: 20px;
-            background: var(--bg);
-            padding: 0 10px;
-            font-size: 0.55rem;
-            color: var(--text-muted);
-            letter-spacing: 0.1em;
-        }
-
-        h3 {
-            font-size: 1.1rem;
-            margin-bottom: 1.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--accent);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        /* Heartbeat Logic */
-        .heartbeat-feed {
-            margin-top: 1rem;
-            font-size: 0.75rem;
-        }
-
-        .beat-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.6rem 0;
-            border-bottom: 1px dashed rgba(16, 184, 129, 0.1);
-        }
-
-        .beat-sig {
-            width: 8px;
-            height: 8px;
-            background: var(--accent);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--accent);
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.3; transform: scale(1.2); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-
-        /* Skills Matrix */
-        .matrix-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 0.75rem;
-            margin-top: 1rem;
-        }
-
-        .matrix-item {
-            padding: 0.5rem;
-            border: 1px solid rgba(16, 184, 129, 0.1);
-            font-size: 0.65rem;
-            text-align: center;
-            background: rgba(16, 184, 129, 0.02);
-            transition: var(--transition);
-        }
-
-        .matrix-item:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-            background: rgba(16, 184, 129, 0.08);
-        }
-
-        /* Use Cases */
-        .case-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .case-card {
-            padding: 1.5rem;
-            border: 1px solid var(--border);
-            background: rgba(16, 184, 129, 0.01);
-        }
-
-        .case-title {
-            font-size: 0.9rem;
-            color: var(--accent);
-            margin-bottom: 0.75rem;
-            font-weight: 800;
-        }
-
-        .case-desc {
-            font-size: 0.75rem;
-            color: var(--text-main);
-            opacity: 0.7;
+        .grid-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(16, 184, 129, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(16, 184, 129, 0.02) 1px, transparent 1px);
+            background-size: 60px 60px; z-index: -1;
+            mask-image: radial-gradient(ellipse at center, black, transparent 90%);
         }
 
         /* Navigation */
-        .evo-nav {
-            position: fixed;
-            right: 4rem;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            z-index: 100;
+        .sticky-nav {
+            position: sticky; top: 0; width: 100%; background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);
+            z-index: 1000; padding: 1rem 0;
         }
 
-        .nav-dot {
-            width: 8px;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            transition: var(--transition);
+        .nav-container {
+            max-width: 1280px; margin: 0 auto; padding: 0 2rem;
+            display: flex; justify-content: space-between; align-items: center;
         }
 
-        .nav-dot:hover,
-        .nav-dot.active {
-            background: var(--accent);
-            transform: scale(1.5);
-            box-shadow: 0 0 10px var(--accent);
+        .nav-logo {
+            font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 1.1rem;
+            color: var(--text-primary); text-decoration: none;
         }
 
-        [data-reveal] {
-            opacity: 0;
-            transform: translateY(15px);
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        .nav-logo span { color: var(--accent); }
+
+        .nav-links { display: flex; gap: 1.5rem; }
+
+        .nav-links a {
+            color: var(--text-muted); text-decoration: none; font-size: 0.85rem;
+            font-weight: 500; transition: var(--transition); font-family: 'JetBrains Mono', monospace;
         }
 
-        [data-reveal].active {
-            opacity: 1;
-            transform: translateY(0);
+        .nav-links a:hover { color: var(--accent); }
+
+        /* Hero Section */
+        .hero { padding: 8rem 0 4rem; text-align: left; }
+
+        .hero-badge {
+            display: inline-flex; align-items: center; padding: 0.5rem 1.25rem;
+            background: rgba(16, 184, 129, 0.05); border: 1px solid rgba(16, 184, 129, 0.15);
+            border-radius: 99px; font-size: 0.7rem; font-weight: 600; color: var(--accent);
+            text-transform: uppercase; letter-spacing: 0.25em; margin-bottom: 2.5rem;
         }
 
-        footer {
-            margin-top: 8rem;
-            padding: 4rem 0;
-            border-top: 1px solid var(--border);
-            font-size: 0.6rem;
-            color: var(--text-muted);
-            letter-spacing: 0.3em;
-            text-align: center;
-            text-transform: uppercase;
+        .hero-title {
+            font-size: clamp(3.5rem, 8vw, 6rem); font-weight: 800; line-height: 1.05;
+            letter-spacing: -0.04em; margin-bottom: 2rem;
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { background: var(--text-muted); }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+        .hero-title span { color: var(--accent); }
 
-        @media (max-width: 768px) {
-            .container { padding: 2rem; }
-            h1 { font-size: 3.5rem; }
-            .grid { grid-template-columns: 1fr; }
-            .term-card { grid-column: span 12; }
-            .evo-nav { display: none; }
+        .hero-desc { font-size: 1.25rem; color: var(--text-muted); max-width: 700px; margin-bottom: 3rem; }
+
+        /* Section Layouts */
+        .section { padding: 6rem 0; border-bottom: 1px solid var(--border); }
+
+        .section-tag {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent);
+            text-transform: uppercase; letter-spacing: 0.4em; display: block; margin-bottom: 1rem;
+        }
+
+        h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 2rem; letter-spacing: -0.02em; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+
+        .card {
+            background: rgba(15, 23, 42, 0.4); border: 1px solid var(--border);
+            border-radius: var(--radius-lg); padding: 3rem; backdrop-filter: blur(8px);
+        }
+
+        /* Architect Style */
+        .architect-card { display: flex; justify-content: space-between; align-items: center; gap: 4rem; }
+
+        .stat-item { text-align: left; }
+
+        .stat-value { font-size: 2.5rem; font-weight: 800; color: var(--accent); line-height: 1; margin-bottom: 0.25rem; }
+
+        .stat-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); font-weight: 600; }
+
+        /* Technical Specs */
+        .tech-list { list-style: none; margin-top: 2rem; }
+
+        .tech-item {
+            display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;
+        }
+
+        .tech-item::before { content: "→"; color: var(--accent); }
+
+        /* Animations */
+        [data-reveal] { opacity: 0; transform: translateY(20px); transition: var(--transition); }
+        [data-reveal].active { opacity: 1; transform: translateY(0); }
+
+        footer { padding: 4rem 0; text-align: center; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; }
+
+        @media (max-width: 1024px) {
+            .grid-2 { grid-template-columns: 1fr; gap: 3rem; }
+            .architect-card { flex-direction: column; text-align: center; }
         }
     </style>
 </head>
 
 <body>
+    <div class="matrix-bg"></div>
+    <div class="grid-overlay"></div>
 
-    <div class="evo-nav">
-        <a href="https://mk-knight23.github.io/AI-CLAW-ECOSYSTEM/" class="nav-dot" title="Genesis"></a>
-        <a href="https://mk-knight23.github.io/AI-Agent-Nanobot/" class="nav-dot" title="Nanobot"></a>
-        <a href="https://mk-knight23.github.io/AI-Agent-NanoClaw/" class="nav-dot" title="NanoClaw"></a>
-        <div class="nav-dot active" title="PicoClaw"></div>
-        <a href="https://mk-knight23.github.io/AI-Agent-ZeroClaw/" class="nav-dot" title="ZeroClaw"></a>
-    </div>
+    <nav class="sticky-nav">
+        <div class="nav-container">
+            <a href="https://mk-knight23.github.io/AI-CLAW-ECOSYSTEM/" class="nav-logo">AI-<span>CLAW</span>-ECOSYSTEM</a>
+            <div class="nav-links">
+                <a href="https://mk-knight23.github.io/AI-CLAW-ECOSYSTEM/">Hub</a>
+                <a href="https://mk-knight23.github.io/AI-Agent-OpenClaw/">OpenClaw</a>
+                <a href="https://mk-knight23.github.io/AI-Agent-ZeroClaw/">ZeroClaw</a>
+                <a href="https://mk-knight23.github.io/AI-Agent-NanoClaw/">NanoClaw</a>
+                <a href="https://mk-knight23.github.io/AI-Agent-PicoClaw/">PicoClaw</a>
+                <a href="https://mk-knight23.github.io/AI-Agent-Nanobot/">Nanobot</a>
+            </div>
+        </div>
+    </nav>
 
     <div class="container">
-        <header>
-            <div class="lineage-badge" data-reveal>
-                <svg style="width:14px; height:14px; fill:none; stroke:currentColor; stroke-width:2;">
-                    <path d="M12 2v20" />
-                    <path d="m17 5-5-3-5 3" />
-                    <path d="M2 12h20" />
-                </svg>
-                EVO-03: THE DISTRIBUTED
-            </div>
-            <h1 data-reveal style="transition-delay: 0.1s">PicoClaw:<br>Distributed <span>Edge.</span></h1>
-            <p class="lead" data-reveal style="transition-delay: 0.2s">The minimal-footprint evolution. Designed for
-                isolated $10 hardware and resilient heartbeat telemetry.</p>
+        <header class="hero">
+            <div class="hero-badge" data-reveal>Edge Runtime / EVO-03</div>
+            <h1 class="hero-title" data-reveal style="transition-delay: 0.1s">
+                Minimal<br><span>Footprint.</span>
+            </h1>
+            <p class="hero-desc" data-reveal style="transition-delay: 0.2s">
+                PicoClaw is the ultra-lean Go-native evolution optimized for extreme edge hardware, IoT clusters, and low-power autonomous monitoring.
+            </p>
         </header>
 
-        <div class="grid">
-            <!-- Active Heartbeats -->
-            <div class="term-card" style="grid-column: span 12;" data-reveal data-label="TELEMETRY_STREAM">
-                <h3><span class="beat-sig"></span> ACTIVE HEARTBEAT CHANNELS</h3>
-                <div class="heartbeat-feed">
-                    <div class="beat-item">
-                        <span>system-diagnostic.md</span>
-                        <span style="color:var(--text-muted)">15M INTERVAL • DISCORD</span>
+        <section class="section">
+            <div class="card architect-card" data-reveal>
+                <div class="architect-info">
+                    <span class="section-tag">THE ARCHITECT</span>
+                    <h2>Kazi Musharraf</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">AI Engineer & IoT Specialist.</p>
+                    <p>PicoClaw is Kazi's "Sentry Agent," deployed across his IoT infrastructure to provide localized intelligence and real-time monitoring within the 134-agent RALPH matrix.</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div class="stat-item">
+                        <span class="stat-value">12MB</span>
+                        <span class="stat-label">Binary Size</span>
                     </div>
-                    <div class="beat-item">
-                        <span>security-patrol.md</span>
-                        <span style="color:var(--text-muted)">1H INTERVAL • TELEGRAM</span>
-                    </div>
-                    <div class="beat-item">
-                        <span>morning-briefing.md</span>
-                        <span style="color:var(--text-muted)">DAILY 09:00 • WHATSAPP</span>
-                    </div>
-                    <div class="beat-item">
-                        <span>home-server.md</span>
-                        <span style="color:var(--text-muted)">30M INTERVAL • TELEGRAM</span>
+                    <div class="stat-item">
+                        <span class="stat-value">2ms</span>
+                        <span class="stat-label">Heartbeat</span>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- Skills Matrix -->
-            <div class="term-card" style="grid-column: span 12;" data-reveal data-label="SKILL_CAPABILITIES">
-                <h3>EDGE SKILLS MATRIX</h3>
-                <div class="matrix-grid">
-                    <div class="matrix-item">network-guardian</div>
-                    <div class="matrix-item">iot-monitor</div>
-                    <div class="matrix-item">home-automation</div>
-                    <div class="matrix-item">weather-reporter</div>
-                    <div class="matrix-item">resource-optimizer</div>
-                    <div class="matrix-item">code-reviewer</div>
-                    <div class="matrix-item">security-scanner</div>
-                    <div class="matrix-item">deploy-everywhere</div>
-                    <div class="matrix-item">add-telegram</div>
-                    <div class="matrix-item">add-slack</div>
-                    <div class="matrix-item">add-gmail</div>
-                    <div class="matrix-item">add-obsidian</div>
-                    <div class="matrix-item">add-supabase</div>
-                    <div class="matrix-item">claw-ecosystem</div>
+        <section class="section">
+            <div class="grid-2">
+                <div data-reveal>
+                    <span class="section-tag">TECHNICAL DOCUMENTATION</span>
+                    <h2>Edge-Optimized Go</h2>
+                    <p style="color: var(--text-muted);">Engineered for resource-constrained environments without sacrificing reasoning depth.</p>
+                    <ul class="tech-list">
+                        <li class="tech-item">Static Binary Compilation</li>
+                        <li class="tech-item">Low-Memory Context Windowing</li>
+                        <li class="tech-item">MQTT-based Event Bus</li>
+                        <li class="tech-item">OpenClaw Edge-Bridge Sync</li>
+                    </ul>
+                </div>
+                <div class="card" data-reveal style="transition-delay: 0.1s">
+                    <h3 style="margin-bottom: 1rem; color: var(--accent);">Distributed Sensing</h3>
+                    <p>PicoClaw nodes act as the "eyes and ears" of the ecosystem, streaming environmental and system data back to OpenClaw for centralized processing and orchestrated response.</p>
                 </div>
             </div>
+        </section>
 
-            <!-- Workflows -->
-            <div class="term-card" style="grid-column: span 8;" data-reveal data-label="AUTOMATION_PIPELINES">
-                <h3>SCHEDULED WORKFLOWS</h3>
-                <div class="heartbeat-feed">
-                    <div class="beat-item"><span>ci-security-gate</span><span style="color:var(--text-muted)">ON PUSH</span></div>
-                    <div class="beat-item"><span>content-publishing</span><span style="color:var(--text-muted)">BI-WEEKLY</span></div>
-                    <div class="beat-item"><span>cross-compile-pipeline</span><span style="color:var(--text-muted)">ON RELEASE</span></div>
-                    <div class="beat-item"><span>swarm-orchestration</span><span style="color:var(--text-muted)">EVENT-DRIVEN</span></div>
-                    <div class="beat-item"><span>repository-upgrade-cycle</span><span style="color:var(--text-muted)">MONTHLY</span></div>
+        <section class="section">
+            <div class="grid-2">
+                <div class="card" data-reveal>
+                    <h3 style="margin-bottom: 1rem; color: var(--accent);">IoT Cluster Management</h3>
+                    <p>PicoClaw autonomously coordinates tasks across localized hardware clusters, managing resource allocation and ensuring high availability even in offline-first scenarios.</p>
+                </div>
+                <div data-reveal style="transition-delay: 0.1s">
+                    <span class="section-tag">REAL-WORLD AUTOMATION</span>
+                    <h2>Smart Lab Monitoring</h2>
+                    <p>In Kazi's production lab, PicoClaw nodes manage environmental controls and security sensors, providing sub-second latency responses to localized events before syncing with the Hub.</p>
                 </div>
             </div>
+        </section>
 
-            <!-- Hardware Spec -->
-            <div class="term-card" style="grid-column: span 4;" data-reveal data-label="HARDWARE_PROFILE">
-                <h3>NODE SPECS</h3>
-                <div style="font-size: 0.7rem; line-height: 2.2;">
-                    > RUNTIME: Go 1.21+<br>
-                    > BINARY: < 10MB<br>
-                    > TARGETS: RISC-V / ARM / MIPS<br>
-                    > OS: Linux / Termux / OpenWrt
-                </div>
+        <section class="section" style="border: none;">
+            <div style="text-align: center;" data-reveal>
+                <span class="section-tag">THE STORY</span>
+                <h2>Intelligence at the Edge</h2>
+                <p style="max-width: 800px; margin: 0 auto; color: var(--text-muted);">
+                    PicoClaw represents the ecosystem's expansion into the physical world. By shrinking the brain without losing the "vibe," Kazi Musharraf has enabled his orchestrated matrix to exist anywhere—from cloud servers to the smallest edge device.
+                </p>
             </div>
-        </div>
-
-        <!-- Use Cases -->
-        <div data-reveal data-label="REAL_WORLD_DEPLOYMENT">
-            <h3 style="margin-bottom: 2rem;">AGENT USE CASES</h3>
-            <div class="case-grid">
-                <div class="case-card">
-                    <div class="case-title">Recycled Phone Agent</div>
-                    <div class="case-desc">Repurpose old Android hardware via Termux into a 24/7 autonomous monitoring node.</div>
-                </div>
-                <div class="case-card">
-                    <div class="case-title">Router Intelligence</div>
-                    <div class="case-desc">Deploy directly to OpenWrt routers for network-level threat detection and traffic analysis.</div>
-                </div>
-                <div class="case-card">
-                    <div class="case-title">IoT Sentinel</div>
-                    <div class="case-desc">Low-power monitoring of physical sensors, resource optimization, and emergency alerts.</div>
-                </div>
-            </div>
-        </div>
+        </section>
 
         <footer>
-            PICOCLAW EDGE RUNTIME • SPECIATION V3.0 • 14 SKILLS • 11 WORKFLOWS • HARDWARE_AGNOSTIC_RELIABILITY
+            AUTHORIZED BY KAZI MUSHARRAF • PICOCLAW V2.1 • © 2025
         </footer>
     </div>
 
     <script>
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
+                if (entry.isIntersecting) entry.target.classList.add('active');
             });
         }, { threshold: 0.1 });
         document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
